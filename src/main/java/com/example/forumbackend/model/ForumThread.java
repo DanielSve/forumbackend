@@ -27,6 +27,10 @@ public class ForumThread {
     @JoinColumn
     private List<Comment> comments;
 
+    @OneToMany
+    @JoinColumn
+    private List<LikeThread> likeThreads;
+
     public ForumThread() {
     }
 

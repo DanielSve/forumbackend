@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name = "comment")
@@ -23,8 +24,16 @@ public class Comment {
     @JoinColumn
     private User user;
 
+    @OneToMany
+    @JoinColumn
+    private List<LikeComment> likeComments;
+
     public Comment(String content, User user) {
         this.content = content;
         this.user = user;
+    }
+
+    public void addLikeComment(LikeComment likeComment) {
+        likeComments.add(likeComment);
     }
 }

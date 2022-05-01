@@ -2,6 +2,9 @@ package com.example.forumbackend.controller;
 
 import com.example.forumbackend.dto.CommentDto;
 import com.example.forumbackend.dto.ForumThreadDto;
+import com.example.forumbackend.dto.LikeCommentDto;
+import com.example.forumbackend.dto.LikeThreadDto;
+import com.example.forumbackend.model.Comment;
 import com.example.forumbackend.model.ForumThread;
 import com.example.forumbackend.service.ThreadService;
 import org.springframework.web.bind.annotation.*;
@@ -38,5 +41,10 @@ public class ThreadController {
     @GetMapping("/all")
     public List<ForumThread> getAll() {
         return threadService.getAllThreads();
+    }
+
+    @PostMapping("/like")
+    public ForumThread toggleLikeThread(@RequestBody LikeThreadDto likeThreadDto) {
+        return threadService.toggleLike(likeThreadDto);
     }
 }
