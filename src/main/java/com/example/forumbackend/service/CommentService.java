@@ -4,5 +4,5 @@ import com.example.forumbackend.dto.LikeCommentDto;
 import com.example.forumbackend.model.Comment;
 
 public interface CommentService {
-    Comment addLike(LikeCommentDto LikeCommentDto);
+    Comment toggleLikeComment(LikeCommentDto LikeCommentDto);
 }

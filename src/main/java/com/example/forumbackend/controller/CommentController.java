@@ -19,6 +19,6 @@ public class CommentController {
     @PostMapping("/like")
     public Comment likeComment(@RequestBody LikeCommentDto likeCommentDto) {
         System.out.println("COMMENT " + likeCommentDto.getCommentId() + " user " + likeCommentDto.getUserId());
-        return commentService.addLike(likeCommentDto);
+        return commentService.toggleLikeComment(likeCommentDto);
     }
 }

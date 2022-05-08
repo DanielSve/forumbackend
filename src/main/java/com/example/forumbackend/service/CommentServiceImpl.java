@@ -10,6 +10,7 @@ import com.example.forumbackend.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
@@ -27,25 +28,34 @@ public class CommentServiceImpl implements CommentService{
     }
 
     @Override
-    public Comment addLike(LikeCommentDto likeCommentDto) {
-        User user = userRepository.findById(likeCommentDto.getUserId()).orElse(null);
+    public Comment toggleLikeComment(LikeCommentDto likeCommentDto) {
+        User u = userRepository.findById(likeCommentDto.getUserId()).orElse(null);
         Comment c = commentRepository.findById(likeCommentDto.getCommentId()).orElse(null);
-        if(c.getLikeComments().stream().anyMatch(l -> Objects.equals(l.getUser().getId(), likeCommentDto.getUserId()))) {
-            Long id = c.getLikeComments().stream().filter(l ->
-                    l.getUser().getId().equals(likeCommentDto.getUserId())).toList().get(0).getId();
-            likeCommentRepository.deleteById(id);
-            return null;
+        return deleteLikeIfExists(c, likeCommentDto) ?
+                null :
+                addLikeToComment(c,u);
+    }
+
+    public Comment addLikeToComment(Comment c, User user) {
+        LikeComment likeComment = new LikeComment(user);
+        likeCommentRepository.save(likeComment);
+        List<LikeComment> likeComments = new ArrayList<>();
+        likeComments.add(likeComment);
+        if (c.getLikeComments() != null) {
+            c.addLikeComment(likeComment);
         } else {
-            LikeComment likeComment = new LikeComment(user);
-            likeCommentRepository.save(likeComment);
-            List<LikeComment> likeComments = new ArrayList<>();
-            likeComments.add(likeComment);
-            if (c.getLikeComments() != null) {
-                c.addLikeComment(likeComment);
-            } else {
-                c.setLikeComments(likeComments);
-            }
-            return commentRepository.save(c);
+            c.setLikeComments(likeComments);
         }
+        return commentRepository.save(c);
+    }
+
+    public boolean deleteLikeIfExists(Comment c, LikeCommentDto likeCommentDto) {
+        for ( LikeComment likeComment : c.getLikeComments()){
+            if(likeComment.getUser().getId() == likeCommentDto.getUserId()) {
+                likeCommentRepository.deleteById(likeComment.getId());
+                return true;
+            }
+        }
+        return false;
     }
 }

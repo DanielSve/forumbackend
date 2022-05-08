@@ -2,6 +2,7 @@ package com.example.forumbackend.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import org.hibernate.annotations.Fetch;
 
 import javax.persistence.*;
 import java.util.List;
@@ -23,7 +24,7 @@ public class ForumThread {
     @JoinColumn(name = "user_id")
     private User user;
 
-    @OneToMany
+    @OneToMany(fetch=FetchType.LAZY)
     @JoinColumn
     private List<Comment> comments;
 
