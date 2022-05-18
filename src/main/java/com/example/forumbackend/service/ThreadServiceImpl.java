@@ -3,6 +3,7 @@ package com.example.forumbackend.service;
 import com.example.forumbackend.dto.CommentDto;
 import com.example.forumbackend.dto.ForumThreadDto;
 import com.example.forumbackend.dto.LikeThreadDto;
+import com.example.forumbackend.dto.ThreadWithCommentsDto;
 import com.example.forumbackend.model.Comment;
 import com.example.forumbackend.model.ForumThread;
 import com.example.forumbackend.model.LikeThread;
@@ -38,30 +39,32 @@ public class ThreadServiceImpl implements ThreadService{
     }
 
     @Override
-    public ForumThread addComment(CommentDto commentDto) {
+    public Comment addComment(CommentDto commentDto) {
         User u = userRepository.findById(commentDto.getUserId()).orElse(null);
-        Comment comment = new Comment(commentDto.getContent(),u);
-        commentRepository.save(comment);
         ForumThread f = threadRepository.findById(commentDto.getThreadId()).orElse(null);
-        List<Comment> comments = new ArrayList<>();
-        comments.add(comment);
-        if(f.getComments()!=null) {
-            comments.addAll(f.getComments());
-        }
-        f.setComments(comments);
-        return threadRepository.save(f);
+        Comment comment = new Comment(commentDto.getContent(),u,f);
+        return commentRepository.save(comment);
     }
 
-    public ForumThread getById(Long id) {
-        return threadRepository.findById(id).orElse(null);
+    public ThreadWithCommentsDto getById(Long id) {
+        ForumThread f = threadRepository.findById(id).orElse(null);
+        System.out.println("Thread " + f);
+        List<Comment> comments = commentRepository.getByForumThread(f);
+        return new ThreadWithCommentsDto(f.getId(), f.getTitle(),f.getContent(), f.getUser(), f.getLikeThreads(), comments);
     }
 
     @Override
     public ForumThread toggleLike(LikeThreadDto likeThreadDto) {
+        System.out.println(likeThreadDto);
         ForumThread f = threadRepository.findById(likeThreadDto.getThreadId()).orElse(null);
         return deleteLikeIfExists(f, likeThreadDto) ?
                 null :
                 addLikeToThread(f,likeThreadDto);
+    }
+
+    @Override
+    public List<ForumThread> getThreadsByUserId(Long userId) {
+        return threadRepository.getForumThreadsByUserId(userId);
     }
 
     public ForumThread addLikeToThread(ForumThread f, LikeThreadDto likeThreadDto) {

@@ -18,15 +18,13 @@ public class ForumThread {
     private Long id;
 
     private String title;
+
+    @Column(columnDefinition="TEXT")
     private String content;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
-
-    @OneToMany(fetch=FetchType.LAZY)
-    @JoinColumn
-    private List<Comment> comments;
 
     @OneToMany
     @JoinColumn
@@ -48,7 +46,6 @@ public class ForumThread {
                 ", title='" + title + '\'' +
                 ", content='" + content + '\'' +
                 ", user=" + user +
-                ", comments=" + comments +
                 '}';
     }
 }

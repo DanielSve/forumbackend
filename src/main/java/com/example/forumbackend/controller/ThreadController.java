@@ -1,9 +1,6 @@
 package com.example.forumbackend.controller;
 
-import com.example.forumbackend.dto.CommentDto;
-import com.example.forumbackend.dto.ForumThreadDto;
-import com.example.forumbackend.dto.LikeCommentDto;
-import com.example.forumbackend.dto.LikeThreadDto;
+import com.example.forumbackend.dto.*;
 import com.example.forumbackend.model.Comment;
 import com.example.forumbackend.model.ForumThread;
 import com.example.forumbackend.service.ThreadService;
@@ -29,13 +26,19 @@ public class ThreadController {
     }
 
     @PostMapping("/addComment")
-    public ForumThread addCommentToThread(@RequestBody CommentDto commentDto) {
+    public Comment addCommentToThread(@RequestBody CommentDto commentDto) {
         return threadService.addComment(commentDto);
     }
 
     @GetMapping("/getById/{id}")
-    public ForumThread getById(@PathVariable Long id) {
+    public ThreadWithCommentsDto getById(@PathVariable Long id) {
+        System.out.println(threadService.getById(id));
         return threadService.getById(id);
+    }
+
+    @GetMapping("/getByUserId/{userId}")
+    public List<ForumThread> getByUserId(@PathVariable Long userId) {
+      return threadService.getThreadsByUserId(userId);
     }
 
     @GetMapping("/all")
