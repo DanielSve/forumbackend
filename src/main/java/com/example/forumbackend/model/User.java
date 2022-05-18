@@ -3,6 +3,7 @@ package com.example.forumbackend.model;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import javax.persistence.*;
+import java.util.Set;
 
 @Entity
 @Data
@@ -18,6 +19,9 @@ public class User {
     private String username;
     private String password;
 
+    @ManyToMany(fetch = FetchType.EAGER, cascade=CascadeType.ALL)
+    @JoinTable
+    private Set<Authority> authorities;
 
     public User() {
     }

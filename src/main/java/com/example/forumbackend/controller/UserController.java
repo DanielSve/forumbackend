@@ -3,6 +3,7 @@ package com.example.forumbackend.controller;
 import com.example.forumbackend.dto.LoginDto;
 import com.example.forumbackend.dto.UserInfoDto;
 import com.example.forumbackend.model.User;
+import com.example.forumbackend.service.LoginService;
 import com.example.forumbackend.service.UserService;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,8 +14,11 @@ public class UserController {
 
     UserService userService;
 
-    public UserController(UserService userService) {
+    LoginService loginService;
+
+    public UserController(UserService userService, LoginService loginService) {
         this.userService = userService;
+        this.loginService = loginService;
     }
 
     @PostMapping("/add")
@@ -24,9 +28,9 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public String authorize(@RequestBody LoginDto loginDto) {
+    public UserInfoDto authorize(@RequestBody LoginDto loginDto) throws Exception {
         System.out.println(loginDto);
-        return userService.authorization(loginDto.getUsername(), loginDto.getPassword());
+        return loginService.login(loginDto);
     }
 
     @GetMapping("/getUserInfo/{userId}")
