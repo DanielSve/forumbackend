@@ -7,7 +7,8 @@ import lombok.Data;
 @AllArgsConstructor
 public class CommentDto {
 
-    Long threadId;
-    Long userId;
-    String content;
+    private Long threadId;
+    private Long userId;
+    private String content;
+    private String date;
 }

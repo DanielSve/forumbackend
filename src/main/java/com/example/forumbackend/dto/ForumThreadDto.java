@@ -10,6 +10,7 @@ public class ForumThreadDto {
     private String title;
     private String content;
     private Long userId;
+    private String date;
 
     public ForumThreadDto() {
     }

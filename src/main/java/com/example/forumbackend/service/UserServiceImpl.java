@@ -11,7 +11,7 @@ import java.util.Optional;
 import java.util.Set;
 
 @Service
-public class UserSeviceImpl implements UserService{
+public class UserServiceImpl implements UserService{
 
     UserRepository userRepository;
 
@@ -19,7 +19,7 @@ public class UserSeviceImpl implements UserService{
 
     BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
-    public UserSeviceImpl(UserRepository userRepository, AuthoritiesRepository authoritiesRepository) {
+    public UserServiceImpl(UserRepository userRepository, AuthoritiesRepository authoritiesRepository) {
         this.userRepository = userRepository;
         this.authoritiesRepository = authoritiesRepository;
     }

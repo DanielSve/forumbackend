@@ -34,10 +34,13 @@ public class Comment {
     @JoinColumn
     private List<LikeComment> likeComments;
 
-    public Comment(String content, User user, ForumThread forumThread) {
+    private String date;
+
+    public Comment(String content, User user, ForumThread forumThread, String date) {
         this.content = content;
         this.user = user;
         this.forumThread = forumThread;
+        this.date = date;
     }
 
     public void addLikeComment(LikeComment likeComment) {

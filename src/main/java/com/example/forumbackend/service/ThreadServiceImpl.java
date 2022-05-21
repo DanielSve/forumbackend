@@ -34,7 +34,8 @@ public class ThreadServiceImpl implements ThreadService{
     @Override
     public ForumThread addThread(ForumThreadDto forumThreadDto) {
         User u = userRepository.findById(forumThreadDto.getUserId()).orElse(null);
-        ForumThread f = new ForumThread(forumThreadDto.getTitle(),forumThreadDto.getContent(),u);
+        ForumThread f = new ForumThread(forumThreadDto.getTitle(),forumThreadDto.getContent(),u, forumThreadDto.getDate());
+        System.out.println(f);
         return threadRepository.save(f);
     }
 
@@ -42,20 +43,18 @@ public class ThreadServiceImpl implements ThreadService{
     public Comment addComment(CommentDto commentDto) {
         User u = userRepository.findById(commentDto.getUserId()).orElse(null);
         ForumThread f = threadRepository.findById(commentDto.getThreadId()).orElse(null);
-        Comment comment = new Comment(commentDto.getContent(),u,f);
+        Comment comment = new Comment(commentDto.getContent(),u,f, commentDto.getDate());
         return commentRepository.save(comment);
     }
 
     public ThreadWithCommentsDto getById(Long id) {
         ForumThread f = threadRepository.findById(id).orElse(null);
-        System.out.println("Thread " + f);
         List<Comment> comments = commentRepository.getByForumThread(f);
-        return new ThreadWithCommentsDto(f.getId(), f.getTitle(),f.getContent(), f.getUser(), f.getLikeThreads(), comments);
+        return new ThreadWithCommentsDto(f.getId(), f.getTitle(),f.getContent(), f.getUser(), f.getLikeThreads(), comments, f.getDate());
     }
 
     @Override
     public ForumThread toggleLike(LikeThreadDto likeThreadDto) {
-        System.out.println(likeThreadDto);
         ForumThread f = threadRepository.findById(likeThreadDto.getThreadId()).orElse(null);
         return deleteLikeIfExists(f, likeThreadDto) ?
                 null :

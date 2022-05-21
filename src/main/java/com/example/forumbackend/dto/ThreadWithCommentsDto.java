@@ -24,6 +24,8 @@ public class ThreadWithCommentsDto {
 
     private List<Comment> comments;
 
+    private String date;
+
     public ThreadWithCommentsDto() {
     }
 

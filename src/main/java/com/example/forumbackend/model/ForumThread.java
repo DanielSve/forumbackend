@@ -30,13 +30,16 @@ public class ForumThread {
     @JoinColumn
     private List<LikeThread> likeThreads;
 
+    private String date;
+
     public ForumThread() {
     }
 
-    public ForumThread(String title, String content, User user) {
+    public ForumThread(String title, String content, User user, String date) {
         this.title = title;
         this.content = content;
         this.user = user;
+        this.date = date;
     }
 
     @Override
